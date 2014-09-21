@@ -3,18 +3,23 @@
     tools:context="com.example.demolistview.MainActivity" >
 
     <!-- Search, should appear as action button -->
-    <item android:id="@+id/archive_action"
-          android:title="@string/archive_action"
-          android:showAsAction="ifRoom" />
-    
-    <item android:id="@+id/email_all"
-        android:title="@string/emaill_all"
-        android:showAsAction="never" />
-    
-    <item android:id="@+id/archive_all"
-        android:title="@string/archive_all"
-        android:showAsAction="never" />
-    
+    <item
+        android:id="@+id/archive_action"
+        android:onClick="openArchives"
+        android:showAsAction="ifRoom"
+        android:title="@string/archive_action"/>
+    <item
+        android:id="@+id/email_all"
+        android:showAsAction="ifRoom"
+        android:title="@string/emaill_all" android:onClick="emailAll"/>
+    <item
+        android:id="@+id/archive_all"
+        android:showAsAction="ifRoom"
+        android:title="@string/archive_all" android:onClick="archiveAll"/>
+    <item 
+        android:id="@+id/delete_all"
+        android:showAsAction="never"
+        android:title="@string/delete_all" android:onClick="deleteAll"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

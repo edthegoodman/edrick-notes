@@ -10,10 +10,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,10 +40,10 @@ public class ArchivesActivity extends Activity {
 	//private Button unarchiveButton;
 	//private Button deleteButton;
 	//private Button emailButton;
-	private TextView archivesCounterView;
-	private int archivesCounter = 0;
 	private ArrayList<String> moveList;
 	public final static String UNARCHIVE_DATA_LIST = "ca.ualberta.edrick.notes.UNARCHIVED_ITEMS";
+	private Object mActionMode;
+	public int selectedItem = -1;
 
 
 	@Override
@@ -59,17 +62,6 @@ public class ArchivesActivity extends Activity {
 		// Extract intent passed from MainActivity
 		Intent intent = getIntent();
 		movedDataList = intent.getStringArrayListExtra(MainActivity.MOVE_DATA_LIST);
-
-		// Check if savedInstanceState is empty
-		/*if (savedInstanceState != null) {
-			// Restore value of members from saved state
-			ArrayList<String> myItems = savedInstanceState.getStringArrayList(MainActivity.OUTSTATE_ARRAY_LIST);
-			Log.d("2nd Activity", "arraylist is NOT empty");
-
-		} else {
-			Log.d("2nd Activity", "arraylist is empty");
-		}
-		 */
 
 		/** Method sequence call */
 		instantiateArchivesView();
@@ -98,12 +90,58 @@ public class ArchivesActivity extends Activity {
 		// Configure list view
 		archivesView = (ListView) findViewById(R.id.archives_list_view);
 		archivesView.setAdapter(archivesAdapter);
-		archivesCounterView = (TextView) findViewById(R.id.counterView);
+
+		// Configure list view for Long Clicks
+		archivesView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if (mActionMode != null) {
+					return false;
+				}
+				selectedItem = position;
+				
+				mActionMode = ArchivesActivity.this.startActionMode(mActionModeCallback);
+				view.setSelected(true);
+				return true;
+			}
+
+		});
+
 
 		// Save to preferences
 		System.out.println("SAVING TO ARCHIVED LIST FROM INITIALIZATION...");
 		saveArchivedList(savedArchivedList);
 	}
+
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			// TODO Auto-generated method stub
+			return true;
+		}
+	};
 
 	/*
 	public void createButtons() {
@@ -197,7 +235,7 @@ public class ArchivesActivity extends Activity {
 			System.out.println("NEW DATA FROM INTENT EXISTS...");
 			list.addAll(movedDataList);
 			archiveSet.addAll(list);
-			
+
 			// Clear movedDataList
 			movedDataList.clear();
 			Log.d("CLEARED MOVED DATA LIST SIZE", String.valueOf(movedDataList.size()));
@@ -221,13 +259,6 @@ public class ArchivesActivity extends Activity {
 
 	public void emailSelectedArchives(ArrayList<String> list) {
 
-	}
-
-	/** Not Implemented */
-	public void countArchives() {
-		Integer todoCounter = savedArchivedList.size();
-		Log.d("COUNTER", todoCounter.toString());
-		archivesCounterView.setText("TEST");
 	}
 
 	@Override
@@ -277,7 +308,7 @@ public class ArchivesActivity extends Activity {
 			return true;
 		case R.id.delete_action2:
 			System.out.println("DELETE BUTTON WAS CLICKED FROM ARCHIVES ACTIVITY...");
-			
+
 
 			for(int i=itemCount-1; i >= 0; i--){
 				if(checkedItemPositions.get(i)){

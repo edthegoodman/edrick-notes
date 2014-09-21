@@ -16,6 +16,7 @@
     <string name="archive_action">Archives</string>
     <string name="emaill_all">Email All</string>
     <string name="archive_all">Archive All</string>
+    <string name="delete_all">Delete All</string>
     <string name="title_activity_archives">Archives</string>
     <string name="cab_delete">Delete</string>
     <string name="cab_archive">Archive</string>

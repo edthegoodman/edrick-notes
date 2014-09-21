@@ -10,22 +10,14 @@
 
     <ListView
         android:id="@+id/listViewMain"
-        android:choiceMode="multipleChoice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="225dp"
         android:layout_below="@+id/button_enter"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
+        android:choiceMode="multipleChoice"
         android:longClickable="true" >
     </ListView>
-
-    <TextView
-        android:id="@+id/counterView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_enter"
-        android:layout_alignStart="@+id/button_enter"
-        android:layout_alignParentBottom="true" />
 
     <EditText
         android:id="@+id/editText1"
@@ -35,18 +27,52 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="@string/hint_text" >
-
     </EditText>
 
     <Button
         android:id="@+id/button_enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button_enter"
+        android:layout_width="1000dp"
+        android:layout_height="50dp"
         android:layout_alignLeft="@+id/button_enter"
+        android:layout_alignStart="@+id/button_enter"
         android:layout_below="@+id/editText1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
+        android:onClick="addItems"
         android:text="@string/button_enter" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/button_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_archive"
+        android:layout_alignBottom="@+id/button_archive"
+        android:layout_alignEnd="@+id/listViewMain"
+        android:layout_alignRight="@+id/listViewMain"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="emailItems"
+        android:text="@string/button_email" />
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_archive"
+        android:layout_alignBottom="@+id/button_archive"
+        android:layout_alignLeft="@+id/listViewMain"
+        android:layout_alignStart="@+id/listViewMain"
+        android:onClick="deleteItems"
+        android:text="@string/button_delete" />
+
+    <Button
+        android:id="@+id/button_archive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listViewMain"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp"
+        android:onClick="archiveItems"
+        android:text="@string/button_archive" />
+    
+</RelativeLayout>
