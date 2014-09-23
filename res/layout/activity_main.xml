@@ -11,7 +11,7 @@
     <ListView
         android:id="@+id/listViewMain"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/button_enter"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
@@ -42,22 +42,9 @@
         android:text="@string/button_enter" />
 
     <Button
-        android:id="@+id/button_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_archive"
-        android:layout_alignBottom="@+id/button_archive"
-        android:layout_alignEnd="@+id/listViewMain"
-        android:layout_alignRight="@+id/listViewMain"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        android:onClick="emailItems"
-        android:text="@string/button_email" />
-
-    <Button
         android:id="@+id/button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
         android:layout_alignBaseline="@+id/button_archive"
         android:layout_alignBottom="@+id/button_archive"
         android:layout_alignLeft="@+id/listViewMain"
@@ -66,12 +53,23 @@
         android:text="@string/button_delete" />
 
     <Button
+        android:id="@+id/button_email"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
+        android:layout_alignBaseline="@+id/button_archive"
+        android:layout_alignBottom="@+id/button_archive"
+        android:layout_alignEnd="@+id/listViewMain"
+        android:layout_alignRight="@+id/listViewMain"
+        android:onClick="emailItems"
+        android:text="@string/button_email" />
+
+    <Button
         android:id="@+id/button_archive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
         android:layout_below="@+id/listViewMain"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="20dp"
         android:onClick="archiveItems"
         android:text="@string/button_archive" />
     

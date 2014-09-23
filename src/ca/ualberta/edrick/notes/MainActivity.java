@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,15 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-// Array of options --> ArrayAdapter --> ListView
-
-// List view: {composed of a set of views:da_item.xml}
-
 public class MainActivity extends Activity {
-	
+
 	private EditText entryText;
 	private ListView todoListView;
-	private ArrayList<ToDoItem> moveList;
 	private CustomAdapter adapter;
 	public final static String MOVE_DATA_LIST = "ca.ualberta.edrick.notes.MOVE_DATA";
 	public final static String EXTRA_MESSAGE = "ca.ualberta.edrick.notes.MESSAGE";
@@ -35,15 +29,14 @@ public class MainActivity extends Activity {
 	public final static String TODO_ARRAY_LIST = "ca.ualberta.edrick.notes.TODO_LIST";
 
 	/** List of Problems/Things to do 
-	 * 1) No Archiving
-	 * 2) NotifyListeners when checkeboxes are changed (Use Android Unit Test to test this)
-	 * 3) Add a "Summary" Tab for,
+	 * 1) NotifyListeners when checkeboxes are changed (Use Android Unit Test to test this)
+	 * 2) Add a "Summary" Tab for,
 	 	- total number of TODO items checked (meaning TODO items that was accomplished)
 		- total number of TODO items left unchecked
 		- total number of archived TODO items 
 		- total number of checked archived TODO items
 		- total number of unchecked archived TODO items
-	   4) UML Docs
+	   3) UML Docs
 	 */
 
 	// Counter for when user sees the app, user sees the app when resume method is called
@@ -53,14 +46,15 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		entryText = (EditText) findViewById(R.id.editText1);
-		
+
 		instantiateListView();
 	}
-	
+
 	/** Instantiate the ListView with the items */
 	private void instantiateListView() {
-		// Create list of items
+		// Initialize Managers for Archives List and ToDo List
 		ToDoListManager.initManager(this.getApplicationContext());
+		ArchivesListManager.initManager(this.getApplicationContext());
 
 		Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ToDoList list = new ToDoList(items);
@@ -72,7 +66,7 @@ public class MainActivity extends Activity {
 		todoListView = (ListView) findViewById(R.id.listViewMain);
 		todoListView.setAdapter(adapter);
 
-		
+
 		/** Observer, whenever ToDoList changes, this gets updated */
 		ToDoListController.getToDoList().addListener(new Listener() {
 			@Override
@@ -95,18 +89,17 @@ public class MainActivity extends Activity {
 
 	/** Listener for add Button */
 	public void addItems(View v) {
-		Toast.makeText(this, "Add Button", Toast.LENGTH_SHORT).show();
 		ToDoListController.getToDoList().addToDo(new ToDoItem(entryText.getText().toString(),false,false));
 		System.out.println("Add Clicked");
 		Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		entryText.setText("");
 		ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);
 		System.out.println("list update: " + listUpdate.size());
+		Toast.makeText(this, "Entries Added", Toast.LENGTH_SHORT).show();
 	}
 
 	/** Listener for delete Button */
 	public void deleteItems(View v) {
-		Toast.makeText(this, "Delete Button", Toast.LENGTH_SHORT).show();
 
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
@@ -120,7 +113,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				for (int i = 0; i < count; i++) {
 					if (listUpdate.get(i).isChecked()) {
 						System.out.println("THIS ITEM IS TO BE REMOVED");
@@ -138,20 +130,28 @@ public class MainActivity extends Activity {
 			}
 		});
 		alert.show();
-
 	}
 
 	/** Listener for archive Button */
 	public void archiveItems(View v) {
-		Toast.makeText(this, "Archive Button", Toast.LENGTH_SHORT).show();
-		/** getcheckeditempositions test */
-		SparseBooleanArray checkedItems = todoListView.getCheckedItemPositions();
-		System.out.println("CHECKED ITEMS : " + checkedItems.size());
+
+		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
+		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);
+		final int count = listUpdate.size();
+
+		for (int i = 0; i < count; i++) {
+			if (listUpdate.get(i).isChecked()) {
+				System.out.println("THIS ITEM IS TO BE REMOVED");
+				ArchivesListController.getToDoList().addToDo(listUpdate.get(i));
+				System.out.println("ArchivesList count : " + ArchivesListController.getToDoList().size());
+				ToDoListController.getToDoList().removeToDo(listUpdate.get(i));
+				System.out.println("List Update : " + items.size());
+			}
+		}
 	}
 
 	/** Listener for email Button */
 	public void emailItems(View v) {
-		Toast.makeText(this, "Email Button", Toast.LENGTH_SHORT).show();
 
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
@@ -206,21 +206,8 @@ public class MainActivity extends Activity {
 		emailAlert.show();
 	}
 
-	/** Menu action button for "Archives", intent is passed here */
-	public void openArchives(MenuItem menu) {
-		Intent intent = new Intent(MainActivity.this, ArchivesActivity.class);
-		//intent.putStringArrayListExtra(MOVE_DATA_LIST, moveList);
-		if (moveList != null) {
-			startActivityForResult(intent, 69);
-			moveList.clear();
-		} else {
-			startActivityForResult(intent, 69);
-		}
-	}
-
 	/** Menu action button for "Delete All" */
 	public void deleteAll(MenuItem menu) {
-		Toast.makeText(this, "Delete All Button", Toast.LENGTH_SHORT).show();
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -230,7 +217,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				if (ToDoListController.getToDoList().getList().size() != 0) {
 					System.out.println("THIS ITEM IS TO BE REMOVED");
 					ToDoListController.getToDoList().removeAll();
@@ -246,12 +232,10 @@ public class MainActivity extends Activity {
 			}
 		});
 		alert.show();
-
 	}
 
 	/** Menu action button for "Email All" */
 	public void emailAll(MenuItem menu) {
-		Toast.makeText(this, "Email All Button", Toast.LENGTH_SHORT).show();
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
 		final int count = listUpdate.size();
@@ -305,8 +289,46 @@ public class MainActivity extends Activity {
 
 	/** Menu action button for "Archive All" */
 	public void archiveAll(MenuItem menu) {
-		Toast.makeText(this, "Archive All Button", Toast.LENGTH_SHORT).show();
-	}
+		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
+		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
+		final int count = listUpdate.size();
 
+		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+		alert.setMessage("Do you want to continue archiving all items?");
+		alert.setCancelable(true);
+
+		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				for (int i = 0; i < count; i++) {
+					System.out.println("THIS ITEM IS TO BE REMOVED");
+					ArchivesListController.getToDoList().addToDo(listUpdate.get(i));
+					System.out.println("ToDoList count : " + ArchivesListController.getToDoList().size());
+					ToDoListController.getToDoList().removeToDo(listUpdate.get(i));
+					System.out.println("ArchivesList count : " + items.size());
+				}
+			}
+		});
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// Do Nothing
+			}
+		});
+		alert.show();
+	}
 	
+	/** Menu action to go into ArchivesActivity */
+	public void openArchives(MenuItem menu) {
+		Intent intent = new Intent(MainActivity.this, ArchivesActivity.class);
+		startActivity(intent);
+	}
+	
+	/** Menu action to go into Summary Activity */
+	public void openSummary(MenuItem menu) {
+		Intent intent = new Intent(MainActivity.this, SummaryActivity.class);
+		startActivity(intent);
+	}
 }
