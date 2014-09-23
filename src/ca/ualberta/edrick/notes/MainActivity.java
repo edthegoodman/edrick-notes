@@ -9,14 +9,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,40 +24,26 @@ import android.widget.Toast;
 // List view: {composed of a set of views:da_item.xml}
 
 public class MainActivity extends Activity {
-	private Button addButton;
-	private Button deleteButton;
-	private Button archiveButton;
-	private Button emailButton;
+	
 	private EditText entryText;
 	private ListView todoListView;
-	private ArrayList<ToDoItem> myItems;
 	private ArrayList<ToDoItem> moveList;
-	private ArrayList<ToDoItem> movedDataList;
 	private CustomAdapter adapter;
-	private Integer todoCounter;
 	public final static String MOVE_DATA_LIST = "ca.ualberta.edrick.notes.MOVE_DATA";
 	public final static String EXTRA_MESSAGE = "ca.ualberta.edrick.notes.MESSAGE";
 	public final static String OUTSTATE_ARRAY_LIST = "ca.ualberta.edrick.notes.ARRAY_LIST";
 	public final static String TODO_ARRAY_LIST = "ca.ualberta.edrick.notes.TODO_LIST";
-	public SharedPreferences myTODOprefs;
-	public SharedPreferences.Editor myTODOeditor;
-	private int counter=0;
-	//private ListView list;
-	private Object mActionMode;
-	public int selectedItem = -1;
 
 	/** List of Problems/Things to do 
-	 * 1) Entries are saved but not their checkbox state
-	 * 2) No Emailing Yet
-	 * 3) No Delete/Archive/Email All
-	 * 4) Hidden settings are not showing on real device
-	 * 5) Add a "Summary" Tab for,
+	 * 1) No Archiving
+	 * 2) NotifyListeners when checkeboxes are changed (Use Android Unit Test to test this)
+	 * 3) Add a "Summary" Tab for,
 	 	- total number of TODO items checked (meaning TODO items that was accomplished)
 		- total number of TODO items left unchecked
 		- total number of archived TODO items 
 		- total number of checked archived TODO items
 		- total number of unchecked archived TODO items
-	   6) Save state of item (checked or not) when archiving
+	   4) UML Docs
 	 */
 
 	// Counter for when user sees the app, user sees the app when resume method is called
@@ -69,14 +52,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//addButton = (Button) findViewById(R.id.button_enter);
-		//deleteButton = (Button) findViewById(R.id.button_delete);
-		//archiveButton = (Button) findViewById(R.id.button_archive);
-		//emailButton = (Button) findViewById(R.id.button_email);
-
-		entryText = (EditText) findViewById(R.id.editText1);		
+		entryText = (EditText) findViewById(R.id.editText1);
+		
 		instantiateListView();
-		//createButtons();
 	}
 	
 	/** Instantiate the ListView with the items */
@@ -167,7 +145,6 @@ public class MainActivity extends Activity {
 	public void archiveItems(View v) {
 		Toast.makeText(this, "Archive Button", Toast.LENGTH_SHORT).show();
 		/** getcheckeditempositions test */
-		int count = todoListView.getCount();
 		SparseBooleanArray checkedItems = todoListView.getCheckedItemPositions();
 		System.out.println("CHECKED ITEMS : " + checkedItems.size());
 	}

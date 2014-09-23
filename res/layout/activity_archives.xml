@@ -11,18 +11,42 @@
     <ListView
         android:id="@+id/archives_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
+        android:layout_height="370dp"
         android:layout_centerHorizontal="true"
         android:choiceMode="multipleChoice" >
 
     </ListView>
 
-    <TextView
-        android:id="@+id/archives_counter_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+    <Button
+        android:id="@+id/unarchive_action2"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
+        android:layout_alignBaseline="@+id/email_action2"
+        android:layout_alignBottom="@+id/email_action2"
+        android:layout_alignEnd="@+id/archives_list_view"
+        android:layout_alignRight="@+id/archives_list_view"
+        android:onClick="unarchiveArchive"
+        android:text="@string/unarchive_action2" />
+
+    <Button
+        android:id="@+id/delete_action2"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
+        android:layout_alignLeft="@+id/archives_list_view"
+        android:layout_alignStart="@+id/archives_list_view"
+        android:layout_below="@+id/archives_list_view"
+        android:layout_marginTop="31dp"
+        android:onClick="deleteArchive"
+        android:text="@string/delete_action2" />
+
+    <Button
+        android:id="@+id/email_action2"
+        android:layout_width="105dp"
+        android:layout_height="70dp"
+        android:layout_alignBaseline="@+id/delete_action2"
+        android:layout_alignBottom="@+id/delete_action2"
+        android:layout_centerHorizontal="true"
+        android:onClick="emailArchive"
+        android:text="@string/email_action2" />
 
 </RelativeLayout>
