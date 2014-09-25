@@ -29,17 +29,9 @@ public class MainActivity extends Activity {
 	public final static String TODO_ARRAY_LIST = "ca.ualberta.edrick.notes.TODO_LIST";
 
 	/** List of Problems/Things to do 
-	 * 1) NotifyListeners when checkeboxes are changed (Use Android Unit Test to test this)
-	 * 2) Add a "Summary" Tab for,
-	 	- total number of TODO items checked (meaning TODO items that was accomplished)
-		- total number of TODO items left unchecked
-		- total number of archived TODO items 
-		- total number of checked archived TODO items
-		- total number of unchecked archived TODO items
-	   3) UML Docs
+	   1) UML Docs, Licenses, README
 	 */
 
-	// Counter for when user sees the app, user sees the app when resume method is called
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,13 +50,14 @@ public class MainActivity extends Activity {
 
 		Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ToDoList list = new ToDoList(items);
-
+		
 		// Build the Adapter (Converts items into appropriate views)
 		adapter = new CustomAdapter(this, list);
 
 		// Configure list view.
 		todoListView = (ListView) findViewById(R.id.listViewMain);
 		todoListView.setAdapter(adapter);
+		adapter.deselectAll();
 
 
 		/** Observer, whenever ToDoList changes, this gets updated */
@@ -78,6 +71,7 @@ public class MainActivity extends Activity {
 				adapter.notifyDataSetChanged();
 			}
 		});
+		
 	}
 
 	@Override
@@ -86,7 +80,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
 	/** Listener for add Button */
 	public void addItems(View v) {
 		ToDoListController.getToDoList().addToDo(new ToDoItem(entryText.getText().toString(),false,false));
@@ -183,8 +177,10 @@ public class MainActivity extends Activity {
 					if(listUpdate.get(i).isChecked()){
 						if(listUpdate.get(i).isDone()) {
 							sb.append("[X]   " + listUpdate.get(i).getItemName().toString() + "\n");
+							sb.append("\n");
 						} else {
 							sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + '\n');
+							sb.append("\n");
 						}
 					} 
 				}
@@ -265,8 +261,10 @@ public class MainActivity extends Activity {
 				for(int i = 0; i < count; i++) {
 					if(listUpdate.get(i).isDone()) {
 						sb.append("[X]   " + listUpdate.get(i).getItemName().toString() + "\n");
+						sb.append("\n");
 					} else {
-						sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + '\n');
+						sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + "\n");
+						sb.append("\n");
 					}
 				}
 				email.putExtra(Intent.EXTRA_TEXT, sb.toString());

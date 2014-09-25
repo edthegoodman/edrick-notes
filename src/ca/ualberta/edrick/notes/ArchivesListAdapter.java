@@ -10,12 +10,11 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class CustomAdapter extends BaseAdapter {
-
+public class ArchivesListAdapter extends BaseAdapter {
 	private ToDoList objects;
 	private final Context context;
 	
-	public CustomAdapter (Context context, ToDoList items) {
+	public ArchivesListAdapter (Context context, ToDoList items) {
 		this.objects = items;
 		this.context = context;
 	}
@@ -49,9 +48,9 @@ public class CustomAdapter extends BaseAdapter {
 			holder.cb = (CheckBox) v.findViewById(R.id.check);
 			holder.tv = (TextView) v.findViewById(R.id.item_name);
 			holder.sb = (CheckBox) v.findViewById(R.id.star);
+			holder.sb.setClickable(false);
+			holder.sb.setEnabled(false);
 
-			System.out.println("Objects Size" + objects.size());
-			System.out.println("SetDone : " + objects.getToDoItem(0).isDone());
 			if (todo != null) {				
 
 				holder.cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -60,16 +59,6 @@ public class CustomAdapter extends BaseAdapter {
 					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 						int getPos = (Integer) buttonView.getTag();
 						objects.getToDoItem(getPos).setChecked(buttonView.isChecked());
-					}
-				});
-				holder.sb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						int getPos = (Integer) buttonView.getTag();
-						objects.getToDoItem(getPos).setDone(buttonView.isChecked());
-						// Notifies the listeners for checkbox clicks
-						ToDoListController.getToDoList().notifyListeners();
 					}
 				});
 			}
@@ -105,7 +94,4 @@ public class CustomAdapter extends BaseAdapter {
 		CheckBox cb;
 		CheckBox sb;
 	}
-
 }
-
-

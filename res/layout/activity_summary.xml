@@ -8,5 +8,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.ualberta.edrick.notes.SummaryActivity" >
 
+    <TextView
+        android:id="@+id/total_num_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="50dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/notdone_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/total_num_todo"
+        android:layout_below="@+id/total_num_todo"
+        android:layout_marginTop="17dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/done_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/notdone_todo"
+        android:layout_below="@+id/notdone_todo"
+        android:layout_marginTop="17dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/total_num_archived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/done_todo"
+        android:layout_below="@+id/done_todo"
+        android:layout_marginTop="17dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/not_done_archived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/total_num_archived"
+        android:layout_below="@+id/total_num_archived"
+        android:layout_marginTop="17dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/done_archived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/not_done_archived"
+        android:layout_below="@+id/not_done_archived"
+        android:layout_marginTop="17dp"
+        android:text="" />
 
 </RelativeLayout>

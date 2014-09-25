@@ -28,9 +28,6 @@ public class ToDoItem implements Serializable {
 		return done;
 	}
 
-	public void setItemName(String name) {
-}
-
 	public void setChecked (Boolean bool) {
 		checked = bool;
 	}

@@ -27,7 +27,6 @@ public class ToDoList implements Serializable {
 	private ArrayList<Listener> getListeners() {
 		if (listeners == null ) {
 			listeners = new ArrayList<Listener>();
-	
 		}
 		return listeners;
 	}
@@ -59,8 +58,7 @@ public class ToDoList implements Serializable {
 		return todoList.contains(item);
 	}
 	
-	private void notifyListeners() {
-		// TODO Auto-generated method stub
+	public void notifyListeners() {
 		for (Listener listener : getListeners()) {
 			listener.update();
 		}
@@ -79,16 +77,10 @@ public class ToDoList implements Serializable {
 	}
 
 	public void addAll(Collection<ToDoItem> items) {
-		// TODO Auto-generated method stub
 		todoList.addAll(items);
 	}
 	
 	public void clear() {
 		todoList.clear();
 	}
-
-	//public Object get(int position) {
-		// TODO Auto-generated method stub
-	//	return todoList.get(position);
-	//}
 }

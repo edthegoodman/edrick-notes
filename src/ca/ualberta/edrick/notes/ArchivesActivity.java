@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class ArchivesActivity extends Activity {
 
-	private CustomAdapter archivesAdapter;
+	private ArchivesListAdapter archivesAdapter;
 	private ListView archivesView;
 	public final static String UNARCHIVE_DATA_LIST = "ca.ualberta.edrick.notes.UNARCHIVED_ITEMS";
 	public int selectedItem = -1;
@@ -44,13 +44,10 @@ public class ArchivesActivity extends Activity {
 		Collection<ToDoItem> items = ArchivesListController.getToDoList().getList();
 		final ToDoList archivesList = new ToDoList(items);
 
-		System.out.println("INITIALIZATION...");
-
-		System.out.println("Instantiate items count : " + items.size());
-		System.out.println("ArchivesList count : " + archivesList.size());
+		System.out.println("Archives INITIALIZATION...");
 
 		// Build the Adapter (Converts items into appropriate views)
-		archivesAdapter = new CustomAdapter(ArchivesActivity.this, archivesList);	
+		archivesAdapter = new ArchivesListAdapter(ArchivesActivity.this, archivesList);	
 
 		// Notify adapter that archives arrived
 		archivesAdapter.notifyDataSetChanged();
@@ -58,6 +55,7 @@ public class ArchivesActivity extends Activity {
 		// Configure list view
 		archivesView = (ListView) findViewById(R.id.archives_list_view);
 		archivesView.setAdapter(archivesAdapter);
+		archivesAdapter.deselectAll();
 
 		/** Observer, whenever ToDoList changes, this gets updated */
 		ArchivesListController.getToDoList().addListener(new Listener() {
@@ -186,8 +184,10 @@ public class ArchivesActivity extends Activity {
 					if(listUpdate.get(i).isChecked()){
 						if(listUpdate.get(i).isDone()) {
 							sb.append("[X]   " + listUpdate.get(i).getItemName().toString() + "\n");
+							sb.append("\n");
 						} else {
-							sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + '\n');
+							sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + "\n");
+							sb.append("\n");
 						}
 					} 
 				}
@@ -308,8 +308,10 @@ public class ArchivesActivity extends Activity {
 				for(int i = 0; i < count; i++) {
 					if(listUpdate.get(i).isDone()) {
 						sb.append("[X]   " + listUpdate.get(i).getItemName().toString() + "\n");
+						sb.append("\n");
 					} else {
-						sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + '\n');
+						sb.append("[   ]   " + listUpdate.get(i).getItemName().toString() + "\n");
+						sb.append("\n");
 					}
 				}
 				email.putExtra(Intent.EXTRA_TEXT, sb.toString());
