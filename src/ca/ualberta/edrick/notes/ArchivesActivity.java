@@ -22,9 +22,6 @@ public class ArchivesActivity extends Activity {
 
 	private ArchivesListAdapter archivesAdapter;
 	private ListView archivesView;
-	public final static String UNARCHIVE_DATA_LIST = "ca.ualberta.edrick.notes.UNARCHIVED_ITEMS";
-	public int selectedItem = -1;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -336,18 +333,5 @@ public class ArchivesActivity extends Activity {
 	public void openSummary(MenuItem menu) {
 		Intent intent = new Intent(ArchivesActivity.this, SummaryActivity.class);
 		startActivity(intent);
-	}
-	
-	@Override
-	public void onBackPressed() {
-		System.out.println("Back button was pressed...");
-		super.onBackPressed();
-		finish();
-	}
-	
-	@Override
-	public void finish() {
-		// TODO Auto-generated method stub
-		super.finish();
 	}
 }

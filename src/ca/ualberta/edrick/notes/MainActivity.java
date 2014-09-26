@@ -23,10 +23,6 @@ public class MainActivity extends Activity {
 	private EditText entryText;
 	private ListView todoListView;
 	private CustomAdapter adapter;
-	public final static String MOVE_DATA_LIST = "ca.ualberta.edrick.notes.MOVE_DATA";
-	public final static String EXTRA_MESSAGE = "ca.ualberta.edrick.notes.MESSAGE";
-	public final static String OUTSTATE_ARRAY_LIST = "ca.ualberta.edrick.notes.ARRAY_LIST";
-	public final static String TODO_ARRAY_LIST = "ca.ualberta.edrick.notes.TODO_LIST";
 
 	/** List of Problems/Things to do 
 	   1) UML Docs, Licenses, README

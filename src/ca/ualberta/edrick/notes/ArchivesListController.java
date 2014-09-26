@@ -17,11 +17,9 @@ public class ArchivesListController {
 					}
 				});
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw new RuntimeException("Could not deserialize ToDoList from ToDoListManager");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw new RuntimeException("Could not deserialize ToDoList from ToDoListManager");
 			}
@@ -33,7 +31,6 @@ public class ArchivesListController {
 		try {
 			ArchivesListManager.getManager().saveArchivesList(getToDoList());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException("Could not deserialize ToDoList from ToDoListManager");
 		}
@@ -47,19 +44,8 @@ public class ArchivesListController {
 		getToDoList().removeToDo(item);
 	}
 
-	public void archiveToDo(ToDoItem item) {
-		// TODO
-	}
-
-	public void emailToDo(ToDoItem item) {
-		// TODO
-	}
-
 	public void removeAll() {
 		getToDoList().removeAll();
 	}
 
-	public void archiveAll() {
-		// TODO
-	}
 }
