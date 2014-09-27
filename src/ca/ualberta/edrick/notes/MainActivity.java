@@ -3,8 +3,6 @@ package ca.ualberta.edrick.notes;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.http.protocol.HTTP;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,17 +22,12 @@ public class MainActivity extends Activity {
 	private ListView todoListView;
 	private CustomAdapter adapter;
 
-	/** List of Problems/Things to do 
-	   1) UML Docs, Licenses, README
-	 */
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		entryText = (EditText) findViewById(R.id.editText1);
-
 		instantiateListView();
 	}
 
@@ -57,6 +50,8 @@ public class MainActivity extends Activity {
 
 
 		/** Observer, whenever ToDoList changes, this gets updated */
+		/** This was taken directly from Dr. Hindles' StudentPicker
+		 */
 		ToDoListController.getToDoList().addListener(new Listener() {
 			@Override
 			public void update() {
@@ -72,20 +67,21 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// Inflate the menu, this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
+	/** All the buttons and menus are implemented by calling the corresponding method to the button/menu
+	 * in the "onClick" field of the buttons'/menus' xml file, this idea was taken from Dr. Hindle's StudentPicker
+	 * video.
+	 */
+	
 	/** Listener for add Button */
 	public void addItems(View v) {
 		ToDoListController.getToDoList().addToDo(new ToDoItem(entryText.getText().toString(),false,false));
-		System.out.println("Add Clicked");
-		Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		entryText.setText("");
-		ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);
-		System.out.println("list update: " + listUpdate.size());
-		Toast.makeText(this, "Entries Added", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Entry Added", Toast.LENGTH_SHORT).show();
 	}
 
 	/** Listener for delete Button */
@@ -95,6 +91,8 @@ public class MainActivity extends Activity {
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
 		final int count = listUpdate.size();
 
+		/** The idea of dialogs cames from http://developer.android.com/guide/topics/ui/dialogs.html
+		 */
 		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
 		alert.setMessage("Do you want to continue deleting?");
 		alert.setCancelable(true);
@@ -105,9 +103,7 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				for (int i = 0; i < count; i++) {
 					if (listUpdate.get(i).isChecked()) {
-						System.out.println("THIS ITEM IS TO BE REMOVED");
 						ToDoListController.getToDoList().removeToDo(listUpdate.get(i));
-						System.out.println("List Update : " + items.size());
 					}
 				}
 			}
@@ -131,16 +127,16 @@ public class MainActivity extends Activity {
 
 		for (int i = 0; i < count; i++) {
 			if (listUpdate.get(i).isChecked()) {
-				System.out.println("THIS ITEM IS TO BE REMOVED");
 				ArchivesListController.getToDoList().addToDo(listUpdate.get(i));
-				System.out.println("ArchivesList count : " + ArchivesListController.getToDoList().size());
 				ToDoListController.getToDoList().removeToDo(listUpdate.get(i));
-				System.out.println("List Update : " + items.size());
 			}
 		}
 	}
 
 	/** Listener for email Button */
+	/** Emailing was done by sending intents to another activity such as an email client, and this was made possible through the use of intents.
+	 *  The idea came from http://developer.android.com/training/sharing/send.html.
+	 */
 	public void emailItems(View v) {
 
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
@@ -148,13 +144,17 @@ public class MainActivity extends Activity {
 		final int count = listUpdate.size();
 
 		// Open Alert Dialog asking for Email Address
+		/** The idea of using LinearLayout.LayoutParams to set EditText component as the view of AlertDialog was taken from
+		 * user "Raghunandan" over at stackoverflow.com.
+		 * http://stackoverflow.com/questions/18799216/how-to-make-a-edittext-box-in-a-dialog
+		 */
+		/** The idea of dialogs cames from http://developer.android.com/guide/topics/ui/dialogs.html
+		 */
 		AlertDialog.Builder emailAlert = new AlertDialog.Builder(MainActivity.this);
 		emailAlert.setMessage("Enter E-mail Adress");
 		final EditText emailaddress = new EditText(MainActivity.this);  
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.MATCH_PARENT);
-		emailaddress.setLayoutParams(lp);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+		emailaddress.setLayoutParams(layoutParams);
 		emailAlert.setView(emailaddress);
 		emailAlert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
 
@@ -162,11 +162,11 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				Toast.makeText(MainActivity.this, "Email Address : " + emailaddress.getText().toString(), Toast.LENGTH_SHORT).show();
 				Intent email = new Intent(Intent.ACTION_SEND);
-				email.setType(HTTP.PLAIN_TEXT_TYPE);
+				email.setType("plaint/text");
 				email.putExtra(Intent.EXTRA_EMAIL, new String[]{emailaddress.getText().toString()});
 				email.putExtra(Intent.EXTRA_SUBJECT, "Your ToDo Items");
 
-				// StringBuilder
+				// Using string builder to concatenate the items to be passed to an email client
 				StringBuilder sb = new StringBuilder();;
 
 				for(int i = 0; i < count; i++) {
@@ -181,9 +181,6 @@ public class MainActivity extends Activity {
 					} 
 				}
 				email.putExtra(Intent.EXTRA_TEXT, sb.toString());
-
-				//need this to prompts email client only
-				email.setType("message/rfc822");
 
 				startActivity(Intent.createChooser(email, "Choose an Email client :"));
 			}
@@ -200,8 +197,8 @@ public class MainActivity extends Activity {
 
 	/** Menu action button for "Delete All" */
 	public void deleteAll(MenuItem menu) {
-		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
-
+		/** The idea of dialogs cames from http://developer.android.com/guide/topics/ui/dialogs.html
+		 */
 		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
 		alert.setMessage("Do you want to continue deleting?");
 		alert.setCancelable(true);
@@ -210,9 +207,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (ToDoListController.getToDoList().getList().size() != 0) {
-					System.out.println("THIS ITEM IS TO BE REMOVED");
 					ToDoListController.getToDoList().removeAll();
-					System.out.println("List Update : " + items.size());
 				}
 			}
 		});
@@ -227,19 +222,26 @@ public class MainActivity extends Activity {
 	}
 
 	/** Menu action button for "Email All" */
+	/** Emailing was done by sending intents to another activity such as an email client, and this was made possible through the use of intents.
+	 *  The idea came from http://developer.android.com/training/sharing/send.html.
+	 */
 	public void emailAll(MenuItem menu) {
 		final Collection<ToDoItem> items = ToDoListController.getToDoList().getList();
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
 		final int count = listUpdate.size();
 
 		// Open Alert Dialog asking for Email Address
+		/** The idea of using LinearLayout.LayoutParams to set EditText component as the view of AlertDialog was taken from
+		 * user "Raghunandan" over at stackoverflow.com.
+		 * http://stackoverflow.com/questions/18799216/how-to-make-a-edittext-box-in-a-dialog
+		 */
+		/** The idea of dialogs cames from http://developer.android.com/guide/topics/ui/dialogs.html
+		 */
 		AlertDialog.Builder emailAlert = new AlertDialog.Builder(MainActivity.this);
 		emailAlert.setMessage("Enter E-mail Adress");
 		final EditText emailaddress = new EditText(MainActivity.this);  
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.MATCH_PARENT);
-		emailaddress.setLayoutParams(lp);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+		emailaddress.setLayoutParams(layoutParams);
 		emailAlert.setView(emailaddress);
 		emailAlert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
 
@@ -247,11 +249,11 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				Toast.makeText(MainActivity.this, "Email Address : " + emailaddress.getText().toString(), Toast.LENGTH_SHORT).show();
 				Intent email = new Intent(Intent.ACTION_SEND);
-				email.setType(HTTP.PLAIN_TEXT_TYPE);
+				email.setType("plaint/text");
 				email.putExtra(Intent.EXTRA_EMAIL, new String[]{emailaddress.getText().toString()});
 				email.putExtra(Intent.EXTRA_SUBJECT, "Your ToDo Items");
 
-				// StringBuilder
+				// Using string builder to concatenate the items to be passed to an email client
 				StringBuilder sb = new StringBuilder();;
 
 				for(int i = 0; i < count; i++) {
@@ -264,10 +266,6 @@ public class MainActivity extends Activity {
 					}
 				}
 				email.putExtra(Intent.EXTRA_TEXT, sb.toString());
-
-				//need this to prompts email client only
-				email.setType("message/rfc822");
-
 				startActivity(Intent.createChooser(email, "Choose an Email client :"));
 			}
 		});
@@ -287,6 +285,8 @@ public class MainActivity extends Activity {
 		final ArrayList<ToDoItem> listUpdate = new ArrayList<ToDoItem>(items);	
 		final int count = listUpdate.size();
 
+		/** The idea of dialogs cames from http://developer.android.com/guide/topics/ui/dialogs.html
+		 */
 		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
 		alert.setMessage("Do you want to continue archiving all items?");
 		alert.setCancelable(true);
@@ -296,11 +296,8 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				for (int i = 0; i < count; i++) {
-					System.out.println("THIS ITEM IS TO BE REMOVED");
 					ArchivesListController.getToDoList().addToDo(listUpdate.get(i));
-					System.out.println("ToDoList count : " + ArchivesListController.getToDoList().size());
 					ToDoListController.getToDoList().removeToDo(listUpdate.get(i));
-					System.out.println("ArchivesList count : " + items.size());
 				}
 			}
 		});

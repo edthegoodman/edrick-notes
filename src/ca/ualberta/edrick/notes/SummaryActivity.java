@@ -6,13 +6,16 @@ import android.view.Menu;
 import android.widget.TextView;
 
 public class SummaryActivity extends Activity {
-
+	
+	/** This Activity is solely used for displaying statistics of ToDoList and ArchivesList */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_summary);
 		
-		/** Initialize managers */
+		/** Initialize managers
+		 * The managers are used to obtain the data from both lists
+		 */
 		ToDoListManager.initManager(this.getApplicationContext());
 		ArchivesListManager.initManager(this.getApplicationContext());
 		

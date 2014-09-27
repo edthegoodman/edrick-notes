@@ -10,7 +10,13 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
+/**
+ * The idea of using a custom adapter is based off of Lars Vogel's Android(ListView) - Tutorial,
+ * http://www.vogella.com/tutorials/AndroidListView/article.html
+ * My custom adapter extends BaseAdapter due to talks about extending ArrayAdapter as being "bad" 
+ */
 public class ArchivesListAdapter extends BaseAdapter {
+	
 	private ToDoList objects;
 	private final Context context;
 	
@@ -34,6 +40,11 @@ public class ArchivesListAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/** The getView method was inspired from user Shayan Pourvatan over at stackoverflow, 
+	 * http://stackoverflow.com/questions/22933674/listview-custom-adapter-and-checkboxes,
+	 * alongside user s1ni5t3r's getView() method
+	 * http://stackoverflow.com/questions/12647001/listview-with-custom-adapter-containing-checkboxes
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -70,6 +81,11 @@ public class ArchivesListAdapter extends BaseAdapter {
 			holder = (ViewHolder) v.getTag();
 		}
 
+		/** The fix to the problem of having random selection when scrolling through the ListView came from
+		 *  http://www.lalit3686.blogspot.in/2012/06/today-i-am-going-to-show-how-to-deal.html, the idea was borrowed to
+		 *  implement my own fix. The idea was used to implement lines 78 to 84.
+		 */
+		
 		holder.sb.setTag(Integer.valueOf(position));
 		holder.cb.setTag(Integer.valueOf(position));
 
@@ -89,6 +105,9 @@ public class ArchivesListAdapter extends BaseAdapter {
 		}
 	}
 	
+	/** Reimplemented the same idea for having a ViewHolder inner class from user iGio90 over at stackoverflow,
+	 * http://stackoverflow.com/questions/22933674/listview-custom-adapter-and-checkboxes
+	 */
 	private static class ViewHolder {
 		TextView tv;
 		CheckBox cb;
