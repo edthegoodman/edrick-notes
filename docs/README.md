@@ -3,6 +3,7 @@ edrick-notes
 
 Assignment 1 CMPUT 301
 
+Author : Edrick de Guzman
 Project Name: edrick-notes
 GitHub Repository: https://github.com/gitforschool/edrick-notes
 GitHub Cloning : https://github.com/gitforschool/edrick-notes.git
